@@ -1,48 +1,49 @@
 import './App.css';
 import HttpCall from './components/HttpCall';
-import WebSocketCall from './components/WebSocketCall';
-import { io } from 'socket.io-client';
-import { useEffect, useState } from 'react';
+// import WebSocketCall from './components/WebSocketCall';
+// import { io } from 'socket.io-client';
+// import { useEffect, useState } from 'react';
 
 function App() {
-  const [socketInstance, setSocketInstance] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [buttonStatus, setButtonStatus] = useState(false);
 
-  const handleClick = () => {
-    if (buttonStatus === false) {
-      setButtonStatus(true);
-    } else {
-      setButtonStatus(false);
-    }
-  };
+  // const [socketInstance, setSocketInstance] = useState('');
+  // const [loading, setLoading] = useState(true);
+  // const [buttonStatus, setButtonStatus] = useState(false);
 
-  useEffect(() => {
-    if (buttonStatus === true) {
-      const socket = io('localhost:5001/', {
-        transports: ['websocket'],
-        cors: {
-          origin: 'http://localhost:3000/',
-        },
-      });
+  // const handleClick = () => {
+  //   if (buttonStatus === false) {
+  //     setButtonStatus(true);
+  //   } else {
+  //     setButtonStatus(false);
+  //   }
+  // };
 
-      setSocketInstance(socket);
+  // useEffect(() => {
+  //   if (buttonStatus === true) {
+  //     const socket = io('localhost:5001/', {
+  //       transports: ['websocket'],
+  //       cors: {
+  //         origin: 'http://localhost:3000/',
+  //       },
+  //     });
 
-      socket.on('connect', (data) => {
-        console.log(data);
-      });
+  //     setSocketInstance(socket);
 
-      setLoading(false);
+  //     socket.on('connect', (data) => {
+  //       console.log(data);
+  //     });
 
-      socket.on('disconnect', (data) => {
-        console.log(data);
-      });
+  //     setLoading(false);
 
-      return function cleanup() {
-        socket.disconnect();
-      };
-    }
-  }, [buttonStatus]);
+  //     socket.on('disconnect', (data) => {
+  //       console.log(data);
+  //     });
+
+  //     return function cleanup() {
+  //       socket.disconnect();
+  //     };
+  //   }
+  // }, [buttonStatus]);
 
   return (
     <div className="App">
@@ -50,7 +51,7 @@ function App() {
       <div className="line">
         <HttpCall />
       </div>
-      {!buttonStatus ? (
+      {/* {!buttonStatus ? (
         <button onClick={handleClick}>turn chat on</button>
       ) : (
         <>
@@ -59,7 +60,7 @@ function App() {
             {!loading && <WebSocketCall socket={socketInstance} />}
           </div>
         </>
-      )}
+      )} */}
     </div>
   );
 }
