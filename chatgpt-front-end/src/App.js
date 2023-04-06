@@ -1,47 +1,65 @@
 import './App.css';
-
-import React, { useState } from 'react';
+import HttpCall from './components/HttpCall';
+import WebSocketCall from './components/WebSocketCall';
+import { io } from 'socket.io-client';
+import { useEffect, useState } from 'react';
 
 function App() {
-  const [responseMessage, setResponseMessage] = useState('');
+  const [socketInstance, setSocketInstance] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [buttonStatus, setButtonStatus] = useState(false);
 
-  const handleApiRequest = async () => {
-    const headers = new Headers();
-    headers.set('Accept', 'application/json');
-    headers.set('Access-Control-Allow-Credentials', 'true');
-    headers.set('Access-Control-Allow-Origin', 'true');
-    headers.set('Content-Type', 'application/json');
-
-    const response = await fetch('http://localhost:5000/api', {
-      GET: headers,
-    })
-      .then((r) => console.log(r.json()))
-      .catch((e) => console.log(e));
-
-    // const requestOptions = {
-    //   method: 'POST',
-    //   mode: 'cors',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ data: 'Hello from React!' }),
-    // };
-
-    // const response = await fetch('http://localhost:5000/api', requestOptions);
-    // const data = await response.text();
-    // setResponseMessage(data);
+  const handleClick = () => {
+    if (buttonStatus === false) {
+      setButtonStatus(true);
+    } else {
+      setButtonStatus(false);
+    }
   };
 
-  const containerStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    flexDirection: 'column',
-  };
+  useEffect(() => {
+    if (buttonStatus === true) {
+      const socket = io('localhost:5001/', {
+        transports: ['websocket'],
+        cors: {
+          origin: 'http://localhost:3000/',
+        },
+      });
+
+      setSocketInstance(socket);
+
+      socket.on('connect', (data) => {
+        console.log(data);
+      });
+
+      setLoading(false);
+
+      socket.on('disconnect', (data) => {
+        console.log(data);
+      });
+
+      return function cleanup() {
+        socket.disconnect();
+      };
+    }
+  }, [buttonStatus]);
 
   return (
-    <div style={containerStyle}>
-      <button onClick={handleApiRequest}>Send Request</button>
-      <p>{responseMessage}</p>
+    <div className="App">
+      <h1>React/Flask App + socket.io</h1>
+      <div className="line">
+        <HttpCall />
+      </div>
+      {!buttonStatus ? (
+        <button onClick={handleClick}>turn chat on</button>
+      ) : (
+        <>
+          <button onClick={handleClick}>turn chat off</button>
+          <div className="line">
+            {!loading && <WebSocketCall socket={socketInstance} />}
+          </div>
+        </>
+      )}
     </div>
   );
 }
