@@ -24,12 +24,12 @@ export default function HttpCall() {
   };
 
   const commentElement = data
-    ? data.comments.map((commentChain, chainIndex) => (
+    ? data.comments.formatted_comments.map((commentChain, chainIndex) => (
         <div
           key={chainIndex}
           style={{
             borderBottom:
-              chainIndex < data.comments.length - 1 ? '1px solid white' : '',
+              chainIndex < data.comments.formatted_comments.length - 1 ? '1px solid white' : '',
             paddingBottom: '10px',
             marginBottom: '10px',
           }}
@@ -70,7 +70,12 @@ export default function HttpCall() {
 
   return (
     <>
-      <input type="text" onChange={handleInput} value={input} />
+      <input
+        type="text"
+        style={{ width: '300px' }}
+        onChange={handleInput}
+        value={input}
+      />
       <div style={{ marginTop: '10px' }}>
         <button onClick={handleRequest}>Request</button>
       </div>
