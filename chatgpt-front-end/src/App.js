@@ -47,7 +47,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>React/Flask App + socket.io</h1>
+      <h1>TL;DR: Reddit Thread Summarizer </h1>
       <div className="line">
         <HttpCall />
       </div>
