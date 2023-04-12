@@ -8,6 +8,7 @@ export default function HttpCall() {
   const [input, setInput] = useState('');
 
   const handleRequest = () => {
+    setData('')
     fetch('/http-call', {
       method: 'POST',
       headers: {

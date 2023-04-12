@@ -19,6 +19,7 @@ export default function WebSocketCall({ socket }) {
 
   useEffect(() => {
     socket.on('data', (data) => {
+      console.log('dataHit')
       setMessages([...messages, data.data]);
     });
   }, [socket, messages]);
