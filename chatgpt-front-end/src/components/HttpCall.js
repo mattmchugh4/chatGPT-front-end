@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Search from './Search';
 import Comments from './Comments';
+import RenderPost from './RenderPost';
 
 export default function HttpCall() {
   const [data, setData] = useState('');
@@ -25,10 +26,9 @@ export default function HttpCall() {
     setInput(event.target.value);
   };
 
-
   return (
     <>
-      <Search />
+      {/* <Search /> */}
       <input
         type="text"
         style={{ width: '300px' }}
@@ -39,7 +39,7 @@ export default function HttpCall() {
       <div style={{ marginTop: '10px' }}>
         <button onClick={handleRequest}>Request</button>
       </div>
-      <h2>Response</h2>
+
       <div
         style={{
           display: 'flex',
@@ -48,14 +48,7 @@ export default function HttpCall() {
           gap: '50px',
         }}
       >
-        <div style={{ backgroundColor: 'black', width: '700px' }}>
-          {data.commentArray ? (
-            <Comments
-              commentArray={data.commentArray}
-              summaryArray={data.summaries}
-            />
-          ) : null}
-        </div>
+        {data.formatted_comments ? <RenderPost data={data} /> : null}
       </div>
     </>
   );
