@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Search from './Search';
 import Comments from './Comments';
 import RenderPost from './RenderPost';
 
@@ -8,7 +7,7 @@ export default function HttpCall() {
   const [input, setInput] = useState('');
 
   const handleRequest = () => {
-    setData('')
+    setData('');
     fetch('/http-call', {
       method: 'POST',
       headers: {
@@ -29,18 +28,15 @@ export default function HttpCall() {
 
   return (
     <>
-      {/* <Search /> */}
+      <label htmlFor="urlInput">Paste in Reddit URL to summarize: </label>
       <input
         type="text"
+        id="urlInput"
         style={{ width: '300px' }}
         onChange={handleInput}
         value={input}
       />
-
-      <div style={{ marginTop: '10px' }}>
-        <button onClick={handleRequest}>Request</button>
-      </div>
-
+      <button onClick={handleRequest}>Request</button>
       <div
         style={{
           display: 'flex',
