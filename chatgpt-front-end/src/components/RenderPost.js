@@ -1,5 +1,6 @@
 import Comments from './Comments';
 export default function RenderPost({ data }) {
+  console.log('hitRenderPost')
   const {
     post_title,
     post_date,
@@ -11,6 +12,7 @@ export default function RenderPost({ data }) {
   return (
     <div
       style={{
+        marginTop: 60,
         backgroundColor: 'black',
         color: 'white',
         padding: 30,

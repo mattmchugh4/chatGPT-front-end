@@ -2,25 +2,29 @@ import { useEffect, useState } from 'react';
 import Comments from './Comments';
 import RenderPost from './RenderPost';
 
-export default function HttpCall() {
+export default function MakeRequest({ socket }) {
   const [data, setData] = useState('');
   const [input, setInput] = useState('');
+  const [status, setStatus] = useState('');
 
   const handleRequest = () => {
     setData('');
-    fetch('/http-call', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ data: input }),
-    })
-      .then((response) => response.json())
-      .then((responseData) => {
-        setData(responseData);
-        console.log(responseData);
-      });
+    socket.emit('searchUrl', { inputUrl: input });
   };
+
+  useEffect(() => {
+    socket.on('comment-data', (responseData) => {
+      setData(responseData);
+    });
+
+    socket.on('status-message', (statusMessage) => {
+      setStatus(statusMessage);
+    });
+
+    return () => {
+      socket.off('comment-data');
+    };
+  }, [socket]);
 
   const handleInput = (event) => {
     setInput(event.target.value);
@@ -28,6 +32,7 @@ export default function HttpCall() {
 
   return (
     <>
+      <span>{status}</span>
       <label htmlFor="urlInput">Paste in Reddit URL to summarize: </label>
       <input
         type="text"
@@ -36,7 +41,9 @@ export default function HttpCall() {
         onChange={handleInput}
         value={input}
       />
-      <button onClick={handleRequest}>Request</button>
+      <button onClick={handleRequest} style={{ marginLeft: '10px' }}>
+        Request
+      </button>
       <div
         style={{
           display: 'flex',

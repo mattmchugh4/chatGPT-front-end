@@ -27,9 +27,7 @@ export default function Search({ socket }) {
   }, [socket]);
 
   const handleLinkClick = (event, link) => {
-    event.preventDefault();
-    console.log('Link clicked:', link);
-    // Add your event handler logic here
+    socket.emit('searchUrl', { inputUrl: link });
   };
 
   const linkButtonStyle = {
@@ -43,8 +41,8 @@ export default function Search({ socket }) {
   };
 
   return (
-    <div>
-      <label htmlFor="searchInput">Or perform search: </label>
+    <div style={{ marginTop: '10px' }}>
+      <label htmlFor="searchInput">Or perform reddit search: </label>
       <input
         type="text"
         id="searchInput"
@@ -61,7 +59,7 @@ export default function Search({ socket }) {
             <li key={index}>
               <button
                 style={linkButtonStyle}
-                onClick={(event) => handleLinkClick(event, result[0])}
+                onClick={(event) => handleLinkClick(event, result[1])}
               >
                 {result[0]}
               </button>
