@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO Test Client</title>
+    <!-- Import Socket.IO Client Library -->
+    <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const socket = io('http://localhost:5001', {
+          transports: ['websocket'],
+        });
+
+        socket.on('connect', () => {
+          console.log('Connected to server');
+          // Emit 'searchUrl' event
+          socket.emit('searchUrl', {
+            inputUrl: 'https://www.reddit.com/r/travel/comments/1do8w78/must_do_in_iceland/',
+          });
+        });
+
+        socket.on('disconnect', () => {
+          console.log('Disconnected from server');
+        });
+
+        socket.on('connect_error', (err) => {
+          console.error('Connection Error:', err);
+        });
+
+        // Listen for responses
+        socket.on('connected', (data) => {
+          console.log('Connected Event from Server:', data);
+        });
+
+        socket.on('disconnected', (data) => {
+          console.log('Disconnected Event from Server:', data);
+        });
+
+        socket.on('processedData', (data) => {
+          console.log('Processed Data:', data);
+        });
+
+        socket.on('response', (data) => {
+          console.log('Response from server:', data);
+        });
+
+        socket.on('error', (data) => {
+          console.error('Error from server:', data);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Socket.IO Test Client</h1>
+    <p>Open the browser console to see connection logs.</p>
+  </body>
+</html>

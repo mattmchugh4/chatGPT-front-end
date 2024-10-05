@@ -1,45 +1,52 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
-import MakeRequest from './MakeRequest';
-import Search from './Search';
+import MakeRequest from '@/components/MakeRequest';
+import Search from '@/components/Search';
+import { useEffect, useRef } from 'react';
+import { io, type Socket } from 'socket.io-client';
 
 export default function SocketApp() {
-  const [socketInstance, setSocketInstance] = useState(null);
-  const [isConnected, setConnection] = useState(false);
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    const socket = io('http://localhost:5001/', {
-      transports: ['websocket'],
-      cors: {
-        origin: 'http://localhost:3000/',
-      },
-    });
+    // Initialize socket only once
+    if (!socketRef.current) {
+      socketRef.current = io('http://localhost:5001', {
+        transports: ['websocket'],
+      });
 
-    setSocketInstance(socket);
+      socketRef.current.on('connect', () => {
+        console.log('Connected');
+      });
 
-    socket.on('connect', () => {
-      console.log('Connected');
-      setConnection(true);
-    });
+      socketRef.current.on('connected', (data) => {
+        console.log('Connected Event from Server:', data);
+      });
 
-    socket.on('disconnect', () => {
-      console.log('Disconnected');
-      setConnection(false);
-    });
+      socketRef.current.on('disconnect', () => {
+        console.log('Disconnected');
+      });
 
+      socketRef.current.on('connect_error', (err) => {
+        console.error('Connection Error:', err);
+      });
+    }
+
+    // Cleanup on unmount
     return () => {
-      socket.disconnect();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
     };
   }, []);
 
   return (
-    <div className="flex h-full w-full justify-center">
+    <div className="flex h-full w-full flex-col items-center justify-center">
       <h1 className="my-4 text-4xl font-bold">TL;DR: Reddit Thread Summarizer</h1>
-      <div className="flex justify-center">
-        {isConnected && <MakeRequest socket={socketInstance} />}
-        {isConnected && <Search socket={socketInstance} />}
+      <div className="flex flex-col items-center justify-center">
+        {socketRef.current && <MakeRequest socket={socketRef.current} />}
+        {socketRef.current && <Search socket={socketRef.current} />}
       </div>
     </div>
   );
