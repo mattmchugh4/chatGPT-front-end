@@ -10,7 +10,6 @@ export default function SocketApp() {
   const [isConnected, setConnection] = useState(false);
 
   useEffect(() => {
-    console.log('effectHit');
     const socket = io('http://localhost:5001/', {
       transports: ['websocket'],
       cors: {
@@ -36,7 +35,7 @@ export default function SocketApp() {
   }, []);
 
   return (
-    <div className="h-full w-full text-center">
+    <div className="flex h-full w-full justify-center">
       <h1 className="my-4 text-4xl font-bold">TL;DR: Reddit Thread Summarizer</h1>
       <div className="flex justify-center">
         {isConnected && <MakeRequest socket={socketInstance} />}
