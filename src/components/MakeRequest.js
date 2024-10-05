@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Comments from './Comments';
 import RenderPost from './RenderPost';
 
 export default function MakeRequest({ socket }) {

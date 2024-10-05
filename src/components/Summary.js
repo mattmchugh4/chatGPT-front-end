@@ -7,7 +7,7 @@ export default function Summary({ summary }) {
         borderLeft: '3px solid white',
         paddingLeft: 40,
         width: '50%',
-        textAlign: 'center'
+        textAlign: 'center',
       }}
     >
       {summary || null}

@@ -1,7 +1,7 @@
+import { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 import './App.css';
 import MakeRequest from './components/MakeRequest';
-import { io } from 'socket.io-client';
-import { useEffect, useState } from 'react';
 import Search from './components/Search';
 
 function App() {
