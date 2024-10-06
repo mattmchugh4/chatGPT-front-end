@@ -2,11 +2,12 @@
 
 import MakeRequest from '@/components/MakeRequest';
 import Search from '@/components/Search';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { io, type Socket } from 'socket.io-client';
 
 export default function SocketApp() {
   const socketRef = useRef<Socket | null>(null);
+  const [isConnected, setConnection] = useState(false);
 
   useEffect(() => {
     // Initialize socket only once
@@ -17,6 +18,7 @@ export default function SocketApp() {
 
       socketRef.current.on('connect', () => {
         console.log('Connected');
+        setConnection(true);
       });
 
       socketRef.current.on('connected', (data) => {
@@ -25,6 +27,7 @@ export default function SocketApp() {
 
       socketRef.current.on('disconnect', () => {
         console.log('Disconnected');
+        setConnection(false);
       });
 
       socketRef.current.on('connect_error', (err) => {
@@ -45,8 +48,8 @@ export default function SocketApp() {
     <div className="flex h-full w-full flex-col items-center justify-center">
       <h1 className="my-4 text-4xl font-bold">TL;DR: Reddit Thread Summarizer</h1>
       <div className="flex flex-col items-center justify-center">
-        {socketRef.current && <MakeRequest socket={socketRef.current} />}
-        {socketRef.current && <Search socket={socketRef.current} />}
+        {isConnected && <MakeRequest socket={socketRef.current} />}
+        {isConnected && <Search socket={socketRef.current} />}
       </div>
     </div>
   );
