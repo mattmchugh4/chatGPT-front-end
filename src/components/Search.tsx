@@ -1,4 +1,4 @@
-import type { ChangeEvent, MouseEvent} from 'react';
+import type { ChangeEvent, MouseEvent } from 'react';
 import { useEffect, useState } from 'react';
 import type { Socket } from 'socket.io-client';
 
@@ -15,7 +15,9 @@ export default function Search({ socket }: SearchProps) {
   const [error, setError] = useState<string>('');
 
   const handleSearch = () => {
-    if (!input.trim()) {return;}
+    if (!input.trim()) {
+      return;
+    }
     setSearchResults([]);
     setStatus('');
     setError('');
@@ -29,7 +31,6 @@ export default function Search({ socket }: SearchProps) {
   useEffect(() => {
     if (socket) {
       const handleSearchResult = (data: { result: SearchResult }) => {
-        console.log('Received search result:', data.result);
         setSearchResults((prevResults) => [...prevResults, data.result]);
       };
 

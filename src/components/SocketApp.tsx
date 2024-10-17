@@ -1,9 +1,9 @@
 'use client';
 
 import MakeRequest from '@/components/MakeRequest';
-import Search from '@/components/Search';
 import { useEffect, useRef, useState } from 'react';
 import { io, type Socket } from 'socket.io-client';
+import Typewriter from 'typewriter-effect';
 
 export default function SocketApp() {
   const socketRef = useRef<Socket | null>(null);
@@ -17,16 +17,10 @@ export default function SocketApp() {
       });
 
       socketRef.current.on('connect', () => {
-        console.log('Connected');
         setConnection(true);
       });
 
-      socketRef.current.on('connected', (data) => {
-        console.log('Connected Event from Server:', data);
-      });
-
       socketRef.current.on('disconnect', () => {
-        console.log('Disconnected');
         setConnection(false);
       });
 
@@ -35,7 +29,6 @@ export default function SocketApp() {
       });
     }
 
-    // Cleanup on unmount
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -45,12 +38,26 @@ export default function SocketApp() {
   }, []);
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center">
-      <h1 className="my-4 text-4xl font-bold">TL;DR: Reddit Thread Summarizer</h1>
-      <div className="flex flex-col items-center justify-center">
-        {isConnected && <MakeRequest socket={socketRef.current} />}
-        {isConnected && <Search socket={socketRef.current} />}
+    <div className="flex h-screen w-full flex-col items-center justify-center bg-gradient-to-b from-gray-100 to-gray-500">
+      <div className="h-[15%]"></div>
+      <h1 className="my-4 text-5xl font-bold text-[#FF7F50]">TL;DR: Reddit Thread Summarizer</h1>
+      <div className="mb-6 mt-2 text-xl text-gray-700">
+        <Typewriter
+          options={{
+            strings: [
+              'Summarize lengthy Reddit threads in seconds.',
+              'Get the gist without scrolling endlessly.',
+              'Your time is valuable—save it with concise summaries.',
+            ],
+            autoStart: true,
+            loop: true,
+            delay: 50,
+            deleteSpeed: 30,
+          }}
+        />
       </div>
+
+      {isConnected && socketRef.current && <MakeRequest socket={socketRef.current} />}
     </div>
   );
 }
