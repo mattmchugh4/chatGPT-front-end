@@ -8,6 +8,7 @@ import Typewriter from 'typewriter-effect';
 export default function SocketApp() {
   const socketRef = useRef<Socket | null>(null);
   const [isConnected, setConnection] = useState(false);
+  const [isInitialSearch, setIsInitialSearch] = useState(true);
 
   useEffect(() => {
     // Initialize socket only once
@@ -39,25 +40,31 @@ export default function SocketApp() {
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center bg-gradient-to-b from-gray-100 to-gray-500">
-      <div className="h-[15%]"></div>
-      <h1 className="my-4 text-5xl font-bold text-[#FF7F50]">TL;DR: Reddit Thread Summarizer</h1>
-      <div className="mb-6 mt-2 text-xl text-gray-700">
-        <Typewriter
-          options={{
-            strings: [
-              'Summarize lengthy Reddit threads in seconds.',
-              'Get the gist without scrolling endlessly.',
-              'Your time is valuable—save it with concise summaries.',
-            ],
-            autoStart: true,
-            loop: true,
-            delay: 50,
-            deleteSpeed: 30,
-          }}
-        />
-      </div>
+      {isInitialSearch && (
+        <>
+          <div className="h-[15%]"></div>
+          <h1 className="my-4 text-5xl font-bold text-[#FF7F50]">
+            TL;DR: Reddit Thread Summarizer
+          </h1>
+          <div className=" mt-2 text-xl text-gray-700">
+            <Typewriter
+              options={{
+                strings: [
+                  'Summarize lengthy Reddit threads in seconds.',
+                  'Get the gist without scrolling endlessly.',
+                  'Your time is valuable—save it with concise summaries.',
+                ],
+                autoStart: true,
+                loop: true,
+                delay: 50,
+                deleteSpeed: 30,
+              }}
+            />
+          </div>
+        </>
+      )}
 
-      {isConnected && socketRef.current && <MakeRequest socket={socketRef.current} />}
+      <MakeRequest socket={socketRef.current} setIsInitialSearch={setIsInitialSearch} />
     </div>
   );
 }

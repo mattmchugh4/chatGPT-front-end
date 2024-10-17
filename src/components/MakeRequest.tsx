@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import type { Socket } from 'socket.io-client';
 
 interface MakeRequestProps {
-  socket: Socket;
+  socket: Socket | null;
+  setIsInitialSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface Comment {
@@ -31,7 +32,7 @@ interface CommentData {
   tokens: number;
 }
 
-export default function MakeRequest({ socket }: MakeRequestProps) {
+export default function MakeRequest({ socket, setIsInitialSearch }: MakeRequestProps) {
   const [data, setData] = useState<CommentData | null>(null);
   const [urlInput, setUrlInput] = useState<string>('');
   const [question, setQuestion] = useState<string>('');
@@ -44,7 +45,8 @@ export default function MakeRequest({ socket }: MakeRequestProps) {
     }
     setData(null);
     setError('');
-    socket.emit('searchUrlAndQuestion', { inputUrl: urlInput, userQuestion: question });
+    setIsInitialSearch(false);
+    socket?.emit('searchUrlAndQuestion', { inputUrl: urlInput, userQuestion: question });
   };
 
   useEffect(() => {
@@ -60,14 +62,14 @@ export default function MakeRequest({ socket }: MakeRequestProps) {
       setError(errorData.message);
     };
 
-    socket.on('comment-data', handleCommentData);
-    socket.on('status-message', handleStatusMessage);
-    socket.on('error', handleError);
+    socket?.on('comment-data', handleCommentData);
+    socket?.on('status-message', handleStatusMessage);
+    socket?.on('error', handleError);
 
     return () => {
-      socket.off('comment-data', handleCommentData);
-      socket.off('status-message', handleStatusMessage);
-      socket.off('error', handleError);
+      socket?.off('comment-data', handleCommentData);
+      socket?.off('status-message', handleStatusMessage);
+      socket?.off('error', handleError);
     };
   }, [socket]);
 
@@ -80,9 +82,8 @@ export default function MakeRequest({ socket }: MakeRequestProps) {
   };
 
   return (
-    <div className="flex w-full flex-grow flex-col items-center justify-start overflow-auto">
-      <div className="w-1/3 rounded-lg bg-white p-6 shadow-md">
-        {/* URL Input Section */}
+    <div className="mt-6 flex h-[calc(100vh_-_9.5rem)] w-full flex-col items-center">
+      <div className="w-1/3 rounded-lg border border-gray-600 bg-white p-6 shadow-md">
         <div className="mb-6">
           <label htmlFor="urlInput" className="mb-2 block text-gray-700">
             Reddit URL:
@@ -97,8 +98,7 @@ export default function MakeRequest({ socket }: MakeRequestProps) {
           />
         </div>
 
-        {/* ChatGPT Question Input Section */}
-        <div className="mb-6">
+        <div className="mb-4">
           <label htmlFor="questionInput" className="mb-2 block text-gray-700">
             Ask ChatGPT:
           </label>
@@ -112,8 +112,7 @@ export default function MakeRequest({ socket }: MakeRequestProps) {
           ></textarea>
         </div>
 
-        {/* Submit Button */}
-        <div className="mb-6 flex justify-end">
+        <div className="flex justify-end">
           <button
             onClick={handleRequest}
             disabled={!urlInput.trim() && !question.trim()}
@@ -125,19 +124,23 @@ export default function MakeRequest({ socket }: MakeRequestProps) {
           </button>
         </div>
       </div>
-      {/* Status Message */}
       {status && status !== 'Response complete' && (
         <div className="mb-4">
           <span className="text-md block italic text-black">{status}</span>
         </div>
       )}
-      {/* Error Message */}
       {error && (
         <div className="mb-4">
           <span className="block text-sm text-red-500">{error}</span>
         </div>
       )}
-      {data && data.formatted_comments.length > 0 && <RenderPost data={data as any} />}
+      <div className="min-h-0 w-full flex-1">
+        <div className="h-full overflow-y-auto">
+          {data && data.formatted_comments.length > 0 && <RenderPost data={data as any} />}
+
+          {/* <div className="h-[1200px] w-full bg-red-500"></div> */}
+        </div>
+      </div>
     </div>
   );
 }
