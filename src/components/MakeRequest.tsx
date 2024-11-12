@@ -1,41 +1,22 @@
 'use client';
 
-import RenderPost from '@/components/RenderPost';
+import type { CommentData } from '@/components/CommentResponse';
+import { AppState } from '@/components/SocketApp';
 import type { ChangeEvent } from 'react';
 import { useEffect, useState } from 'react';
 import type { Socket } from 'socket.io-client';
 
 interface MakeRequestProps {
   socket: Socket | null;
-  setIsInitialSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  setAppState: React.Dispatch<React.SetStateAction<AppState>>;
+  setData: React.Dispatch<React.SetStateAction<CommentData | null>>;
 }
 
-interface Comment {
-  id: string;
-  author: string;
-  content: string;
-  timestamp: string;
-}
-
-interface Summary {
-  content: string;
-  tokens: number;
-}
-
-interface CommentData {
-  formatted_comments: Comment[][];
-  initial_post: string;
-  post_date: string;
-  post_title: string;
-  overall_summary: string;
-  summaries: Summary[];
-  tokens: number;
-}
-
-export default function MakeRequest({ socket, setIsInitialSearch }: MakeRequestProps) {
-  const [data, setData] = useState<CommentData | null>(null);
-  const [urlInput, setUrlInput] = useState<string>('');
-  const [question, setQuestion] = useState<string>('');
+export default function MakeRequest({ socket, setAppState, setData }: MakeRequestProps) {
+  const [urlInput, setUrlInput] = useState<string>(
+    'https://www.reddit.com/r/EngineeringResumes/comments/19e0krm/2_yoe_software_engineer_not_getting_any_callbacks/',
+  );
+  const [question, setQuestion] = useState<string>('whats some advice for my resume');
   const [status, setStatus] = useState<string>('');
   const [error, setError] = useState<string>('');
 
@@ -45,13 +26,15 @@ export default function MakeRequest({ socket, setIsInitialSearch }: MakeRequestP
     }
     setData(null);
     setError('');
-    setIsInitialSearch(false);
+    setAppState(AppState.Loading);
     socket?.emit('searchUrlAndQuestion', { inputUrl: urlInput, userQuestion: question });
   };
 
   useEffect(() => {
     const handleCommentData = (responseData: CommentData) => {
+      console.log('Comment data:', responseData);
       setData(responseData);
+      setAppState(AppState.Complete);
     };
 
     const handleStatusMessage = (statusMessage: string) => {
@@ -71,7 +54,7 @@ export default function MakeRequest({ socket, setIsInitialSearch }: MakeRequestP
       socket?.off('status-message', handleStatusMessage);
       socket?.off('error', handleError);
     };
-  }, [socket]);
+  }, [setAppState, setData, socket]);
 
   const handleUrlInput = (event: ChangeEvent<HTMLInputElement>) => {
     setUrlInput(event.target.value);
@@ -134,13 +117,6 @@ export default function MakeRequest({ socket, setIsInitialSearch }: MakeRequestP
           <span className="block text-sm text-red-500">{error}</span>
         </div>
       )}
-      <div className="min-h-0 w-full flex-1">
-        <div className="h-full overflow-y-auto">
-          {data && data.formatted_comments.length > 0 && <RenderPost data={data as any} />}
-
-          {/* <div className="h-[1200px] w-full bg-red-500"></div> */}
-        </div>
-      </div>
     </div>
   );
 }
