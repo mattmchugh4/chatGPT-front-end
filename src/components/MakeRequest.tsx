@@ -1,60 +1,28 @@
 'use client';
 
-import type { CommentData } from '@/components/CommentResponse';
 import { AppState } from '@/components/SocketApp';
 import type { ChangeEvent } from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { Socket } from 'socket.io-client';
 
 interface MakeRequestProps {
   socket: Socket | null;
   setAppState: React.Dispatch<React.SetStateAction<AppState>>;
-  setData: React.Dispatch<React.SetStateAction<CommentData | null>>;
 }
 
-export default function MakeRequest({ socket, setAppState, setData }: MakeRequestProps) {
+export default function MakeRequest({ socket, setAppState }: MakeRequestProps) {
   const [urlInput, setUrlInput] = useState<string>(
     'https://www.reddit.com/r/EngineeringResumes/comments/19e0krm/2_yoe_software_engineer_not_getting_any_callbacks/',
   );
   const [question, setQuestion] = useState<string>('whats some advice for my resume');
-  const [status, setStatus] = useState<string>('');
-  const [error, setError] = useState<string>('');
 
   const handleRequest = () => {
     if (!urlInput.trim() && !question.trim()) {
       return;
     }
-    setData(null);
-    setError('');
     setAppState(AppState.Loading);
     socket?.emit('searchUrlAndQuestion', { inputUrl: urlInput, userQuestion: question });
   };
-
-  useEffect(() => {
-    const handleCommentData = (responseData: CommentData) => {
-      console.log('Comment data:', responseData);
-      setData(responseData);
-      setAppState(AppState.Complete);
-    };
-
-    const handleStatusMessage = (statusMessage: string) => {
-      setStatus(statusMessage);
-    };
-
-    const handleError = (errorData: { message: string }) => {
-      setError(errorData.message);
-    };
-
-    socket?.on('comment-data', handleCommentData);
-    socket?.on('status-message', handleStatusMessage);
-    socket?.on('error', handleError);
-
-    return () => {
-      socket?.off('comment-data', handleCommentData);
-      socket?.off('status-message', handleStatusMessage);
-      socket?.off('error', handleError);
-    };
-  }, [setAppState, setData, socket]);
 
   const handleUrlInput = (event: ChangeEvent<HTMLInputElement>) => {
     setUrlInput(event.target.value);
@@ -107,16 +75,6 @@ export default function MakeRequest({ socket, setAppState, setData }: MakeReques
           </button>
         </div>
       </div>
-      {status && status !== 'Response complete' && (
-        <div className="mb-4">
-          <span className="text-md block italic text-black">{status}</span>
-        </div>
-      )}
-      {error && (
-        <div className="mb-4">
-          <span className="block text-sm text-red-500">{error}</span>
-        </div>
-      )}
     </div>
   );
 }

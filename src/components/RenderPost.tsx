@@ -18,7 +18,7 @@ interface RenderPostProps {
 export default function RenderPost({ data }: RenderPostProps) {
   const { post_title, post_date, overall_summary } = data;
   return (
-    <div className="mt-8 flex max-w-[85%] flex-col items-center justify-center gap-8 rounded-lg bg-gray-900 p-8 text-white shadow-xl mx-auto">
+    <div className="mx-auto mt-8 flex max-w-[85%] flex-col items-center justify-center gap-8 rounded-lg bg-gray-900 p-8 text-white shadow-xl">
       {/* Header Section */}
       {/* <div className="mb-6 border-b border-gray-700 pb-4">
           <div className="flex flex-col gap-2 md:flex-row md:justify-between">
