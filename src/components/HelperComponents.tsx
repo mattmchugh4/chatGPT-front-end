@@ -1,11 +1,9 @@
+import MakeRequest, { type CommentData } from '@/components/MakeRequest';
+import RenderPost from '@/components/RenderPost';
+import { AppState } from '@/components/SocketApp';
 import { PropagateLoader } from 'react-spinners';
 import type { Socket } from 'socket.io-client';
 import Typewriter from 'typewriter-effect';
-
-import type { CommentData } from '@/components/CommentResponse';
-import CommentResponse from '@/components/CommentResponse';
-import MakeRequest from '@/components/MakeRequest';
-import { AppState } from '@/components/SocketApp';
 
 export function SearchView({ socket, onStart }: { socket: Socket | null; onStart: () => void }) {
   return (
@@ -32,8 +30,8 @@ export function SearchView({ socket, onStart }: { socket: Socket | null; onStart
 
 export function LoadingView() {
   return (
-    <div className="mt-6 flex h-[calc(100vh_-_9.5rem)] w-full flex-col items-center">
-      <div className="flex w-1/3 items-center justify-center rounded-lg border border-gray-600 bg-white p-6 shadow-md">
+    <div className="mt-14 flex h-[calc(100vh_-_9.5rem)] w-full flex-col items-center">
+      <div className="flex w-1/3 items-center justify-center rounded-lg border border-gray-600 bg-white p-6 pb-10 pt-9 shadow-md">
         <PropagateLoader color={'#FF7F50'} loading={true} size={15} />
       </div>
     </div>
@@ -51,11 +49,11 @@ export function CompleteView({
     <>
       <button
         onClick={() => setAppState(AppState.Search)}
-        className="mt-4 rounded-md bg-orange-500 px-4 py-2 text-white hover:bg-orange-600"
+        className="mb-8 mt-4 rounded-md bg-orange-500 px-4 py-2 text-white hover:bg-orange-600"
       >
-        Summarize Again
+        Summarize something else
       </button>
-      <CommentResponse data={data} />
+      {data && data.formatted_comments.length > 0 && <RenderPost data={data as any} />}
     </>
   );
 }

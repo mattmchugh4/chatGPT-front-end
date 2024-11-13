@@ -1,5 +1,4 @@
 {
-  // we cant upgrade to eslint 9.0 until next.js supports it, but eventually this file should be changed to eslint.config.js
   "env": {
     "browser": true,
     "es2021": true
@@ -10,7 +9,7 @@
     "next", // Includes Next.js rules, I think also includes recommended rules for react
     "next/core-web-vitals", // Includes rules for Next Core Web Vitals
     "prettier", // Disables conflicting rules to make ESLint work with Prettier
-    "plugin:unicorn/recommended", // Add recommended javascript rules
+    "plugin:unicorn/recommended",
     "plugin:@tanstack/query/recommended"
   ],
   "parser": "@typescript-eslint/parser",
@@ -20,7 +19,7 @@
     "project": "./tsconfig.eslint.json"
   },
   "ignorePatterns": [
-    "**/*.js", // Ignore all .js files in the project
+    "**/*.js",
     "prettier.config.js",
     "jest.config.js",
     "next.config.js",
@@ -35,12 +34,12 @@
     "eqeqeq": ["error", "smart"],
     "curly": "error",
     "no-fallthrough": "error",
-    "require-await": "off", // duplicate with ts lint rule
+    "require-await": "off",
     "import/no-anonymous-default-export": "error",
-    "@next/next/no-img-element": "off", // if we continue to use next, we could could consider turning this on?
+    "@next/next/no-img-element": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/ban-ts-comment": "off", //allows @ts-ignore for now, will want to turn off if @ts-ignore becomes commonly used
-    "@typescript-eslint/no-unused-vars": ["off", { "argsIgnorePattern": "^_" }], // turning off unused variables as it clutters lint output too much
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-unused-vars": ["off", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/consistent-type-exports": "error",
     "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],

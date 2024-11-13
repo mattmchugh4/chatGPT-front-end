@@ -1,17 +1,6 @@
 import CommentChain from '@/components/CommentChain';
 import Summary from '@/components/Summary';
 
-interface CommentChainData {
-  id: string;
-  author: string;
-  content: string;
-}
-
-interface SummaryData {
-  id: string;
-  summary: string;
-}
-
 interface CommentsProps {
   formatted_comments: string[][];
   summaryArray: string[][];

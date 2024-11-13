@@ -14,8 +14,6 @@ export default function CommentChain({ commentChain }: CommentChainProps) {
           : 0;
         const marginLeft = depth * 35;
 
-        // Tailwind's JIT can handle arbitrary values if they follow a consistent pattern.
-        // Ensure that the possible margin-left values are included in your content paths for JIT to process them.
         const marginLeftClass = `ml-[${marginLeft}px]`;
 
         return (

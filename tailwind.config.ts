@@ -1,9 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-  content: [
-    './src/**/*.{js,ts,jsx,tsx,mdx}', // Including all src files in tailwind build process. We can look at being more selective here to improve build times by not including directories with no tailwind classes in the future if we want
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       gridRow: {

@@ -1,4 +1,4 @@
-import type { CommentData } from '@/components/CommentResponse';
+import type { CommentData } from '@/components/MakeRequest';
 import React, { useEffect, useState } from 'react';
 import type { Socket } from 'socket.io-client';
 import { io } from 'socket.io-client';

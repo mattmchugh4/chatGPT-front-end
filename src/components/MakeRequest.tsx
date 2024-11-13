@@ -5,6 +5,30 @@ import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 import type { Socket } from 'socket.io-client';
 
+interface Comment {
+  id: string;
+  author: string;
+  content: string;
+  timestamp: string;
+}
+
+interface Summary {
+  content: string;
+  tokens: number;
+}
+
+export interface CommentData {
+  formatted_comments: Comment[][];
+  initial_post: string;
+  post_date: string;
+  post_title: string;
+  overall_summary: string;
+  summaries: Summary[];
+  tokens: number;
+}
+interface ResponseProps {
+  data: CommentData;
+}
 interface MakeRequestProps {
   socket: Socket | null;
   setAppState: React.Dispatch<React.SetStateAction<AppState>>;

@@ -1,7 +1,7 @@
 'use client';
 
-import type { CommentData } from '@/components/CommentResponse';
 import { CompleteView, ErrorView, LoadingView, SearchView } from '@/components/HelperComponents';
+import type { CommentData } from '@/components/MakeRequest';
 import { useSocket } from '@/components/useSockets';
 import { useCallback, useState } from 'react';
 
@@ -14,7 +14,7 @@ export enum AppState {
 }
 
 export default function SocketApp() {
-  const [appState, setAppState] = useState<AppState>(AppState.Search);
+  const [appState, setAppState] = useState<AppState>(AppState.Loading);
   const [data, setData] = useState<CommentData | null>(null);
   const [statusMessage, setStatusMessage] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -46,8 +46,8 @@ export default function SocketApp() {
   );
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center bg-gradient-to-b from-gray-100 to-gray-500">
-      <div className="h-[10%]"></div>
+    <div className="flex h-screen w-full flex-col items-center justify-start bg-gradient-to-b from-gray-100 to-gray-500">
+      <div className="h-[5%]"></div>
       <h1 className="my-4 text-5xl font-bold text-[#FF7F50]">TL;DR: Reddit Thread Summarizer</h1>
       {appState === AppState.Search && (
         <SearchView socket={socket} onStart={() => setAppState(AppState.Loading)} />
