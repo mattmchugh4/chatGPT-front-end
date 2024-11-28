@@ -14,10 +14,45 @@ export enum AppState {
 }
 
 export default function SocketApp() {
-  const [appState, setAppState] = useState<AppState>(AppState.Loading);
-  const [data, setData] = useState<CommentData | null>(null);
+  const [appState, setAppState] = useState<AppState>(AppState.Search);
+  const [data, setData] = useState<CommentData | null>({ overall_summary: '' } as CommentData);
   const [statusMessage, setStatusMessage] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [streamedResponse, setStreamedResponse] = useState<string>('');
+
+  // useEffect(() => {
+  //   const fetchSearchResults = async () => {
+  //     try {
+  //       const response = await fetch('http://localhost:5001/search', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({ query: 'React tutorials' }), // Example query
+  //       });
+
+  //       if (!response.ok) {
+  //         const errorData = await response.json();
+  //         console.error('Error:', errorData.error || 'Failed to fetch results');
+  //         return;
+  //       }
+
+  //       const data = await response.json();
+  //       console.log('Search Results:', data.results);
+  //     } catch (error) {
+  //       console.error('Fetch error:', error.message);
+  //     }
+  //   };
+
+  //   fetchSearchResults();
+  // }, []);
+
+  const resetState = useCallback(() => {
+    setAppState(AppState.Search);
+    setData({ overall_summary: '' } as CommentData);
+    setStatusMessage('');
+    setError('');
+  }, []);
 
   const handleCommentData = useCallback((responseData: CommentData) => {
     setData(responseData);
@@ -33,6 +68,14 @@ export default function SocketApp() {
     }
   }, []);
 
+  const handleStreamResponse = useCallback((chunk: string) => {
+    setData((prev) => ({
+      ...prev,
+      overall_summary: (prev?.overall_summary || '') + chunk, // Append streamed chunk to overall_summary
+    }));
+    setAppState(AppState.Streaming);
+  }, []);
+
   const handleError = useCallback((errorMsg: string) => {
     setError(errorMsg);
     setAppState(AppState.Error);
@@ -43,6 +86,7 @@ export default function SocketApp() {
     handleCommentData,
     handleStatusMessage,
     handleError,
+    handleStreamResponse,
   );
 
   return (
@@ -58,8 +102,8 @@ export default function SocketApp() {
           <span className="text-md block italic text-black">{statusMessage}</span>
         </div>
       )}
-      {appState === AppState.Complete && data && (
-        <CompleteView data={data} setAppState={setAppState} />
+      {(appState === AppState.Streaming || appState === AppState.Complete) && data && (
+        <CompleteView data={data} resetState={resetState} />
       )}
       {appState === AppState.Error && <ErrorView error={error} />}
     </div>

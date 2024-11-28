@@ -1,6 +1,5 @@
 import MakeRequest, { type CommentData } from '@/components/MakeRequest';
 import RenderPost from '@/components/RenderPost';
-import { AppState } from '@/components/SocketApp';
 import { PropagateLoader } from 'react-spinners';
 import type { Socket } from 'socket.io-client';
 import Typewriter from 'typewriter-effect';
@@ -38,22 +37,16 @@ export function LoadingView() {
   );
 }
 
-export function CompleteView({
-  data,
-  setAppState,
-}: {
-  data: CommentData;
-  setAppState: React.Dispatch<React.SetStateAction<AppState>>;
-}) {
+export function CompleteView({ data, resetState }: { data: CommentData; resetState: () => void }) {
   return (
     <>
       <button
-        onClick={() => setAppState(AppState.Search)}
+        onClick={() => resetState()}
         className="mb-8 mt-4 rounded-md bg-orange-500 px-4 py-2 text-white hover:bg-orange-600"
       >
         Summarize something else
       </button>
-      {data && data.formatted_comments.length > 0 && <RenderPost data={data as any} />}
+      <RenderPost data={data as any} />
     </>
   );
 }

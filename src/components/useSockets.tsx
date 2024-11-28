@@ -8,6 +8,7 @@ export const useSocket = (
   onCommentData: (data: CommentData) => void,
   onStatusMessage: (message: string) => void,
   onError: (error: string) => void,
+  onStreamResponse: (chunk: string) => void,
 ): Socket | null => {
   const socketRef = React.useRef<Socket | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -39,6 +40,7 @@ export const useSocket = (
     // Event listeners
     socketRef.current.on('comment-data', onCommentData);
     socketRef.current.on('status-message', onStatusMessage);
+    socketRef.current.on('stream-response', onStreamResponse); 
     socketRef.current.on('error', (err: { message: string }) => onError(err.message));
 
     // Cleanup on unmount
@@ -46,7 +48,7 @@ export const useSocket = (
       socketRef.current?.disconnect();
       socketRef.current = null;
     };
-  }, [url, onCommentData, onStatusMessage, onError]);
+  }, [url, onCommentData, onStatusMessage, onError, onStreamResponse]);
 
   return socketRef.current;
 };
