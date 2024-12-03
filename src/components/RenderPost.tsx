@@ -41,7 +41,9 @@ export default function RenderPost({ data }: RenderPostProps) {
       {/* Summary Section */}
       <h3 className="mb-4 text-xl font-semibold text-orange-600">Generated Summary</h3>
       <div className="prose prose-invert max-w-none">
-        <ReactMarkdown remarkPlugins={[remarkBreaks, remarkGfm]}>{data.overall_summary}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkBreaks, remarkGfm]}>
+          {data.overall_summary}
+        </ReactMarkdown>
       </div>
     </div>
   );

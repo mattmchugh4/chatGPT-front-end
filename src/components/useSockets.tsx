@@ -40,7 +40,7 @@ export const useSocket = (
     // Event listeners
     socketRef.current.on('comment-data', onCommentData);
     socketRef.current.on('status-message', onStatusMessage);
-    socketRef.current.on('stream-response', onStreamResponse); 
+    socketRef.current.on('stream-response', onStreamResponse);
     socketRef.current.on('error', (err: { message: string }) => onError(err.message));
 
     // Cleanup on unmount
