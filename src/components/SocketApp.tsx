@@ -18,7 +18,6 @@ export default function SocketApp() {
   const [data, setData] = useState<CommentData | null>({ overall_summary: '' } as CommentData);
   const [statusMessage, setStatusMessage] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [streamedResponse, setStreamedResponse] = useState<string>('');
 
   // useEffect(() => {
   //   const fetchSearchResults = async () => {
@@ -81,13 +80,25 @@ export default function SocketApp() {
     setAppState(AppState.Error);
   }, []);
 
-  const socket = useSocket(
+  const testConnection = () => {
+    if (socket) {
+      socket.emit('test', { message: 'This is a test message' });
+    } else {
+      console.error('Socket not connected');
+    }
+  };
+
+  const { isConnected, socket } = useSocket(
     'http://localhost:5001',
     handleCommentData,
     handleStatusMessage,
     handleError,
     handleStreamResponse,
   );
+
+  if (!isConnected) {
+    return <div>Connecting to server...</div>;
+  }
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-start bg-gradient-to-b from-gray-100 to-gray-500">
@@ -106,6 +117,12 @@ export default function SocketApp() {
         <CompleteView data={data} resetState={resetState} />
       )}
       {appState === AppState.Error && <ErrorView error={error} />}
+      {/* <button
+        className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        onClick={testConnection}
+      >
+        Test Connection
+      </button> */}
     </div>
   );
 }
