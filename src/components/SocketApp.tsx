@@ -89,7 +89,7 @@ export default function SocketApp() {
   };
 
   const { isConnected, socket } = useSocket(
-    'http://localhost:5001',
+    process.env.REACT_APP_SOCKET_URL || 'http://localhost:5001',
     handleCommentData,
     handleStatusMessage,
     handleError,
