@@ -87,9 +87,9 @@ export default function SocketApp() {
       console.error('Socket not connected');
     }
   };
-
+  console.log('socket', process.env.NEXT_PUBLIC_SOCKET_URL);
   const { isConnected, socket } = useSocket(
-    process.env.REACT_APP_SOCKET_URL || 'http://localhost:5001',
+    process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5001',
     handleCommentData,
     handleStatusMessage,
     handleError,
