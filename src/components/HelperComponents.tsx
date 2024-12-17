@@ -1,5 +1,6 @@
 import MakeRequest, { type CommentData } from '@/components/MakeRequest';
 import RenderPost from '@/components/RenderPost';
+import type { PostData } from '@/components/SocketApp';
 import { PropagateLoader } from 'react-spinners';
 import type { Socket } from 'socket.io-client';
 import Typewriter from 'typewriter-effect';
@@ -37,7 +38,15 @@ export function LoadingView() {
   );
 }
 
-export function CompleteView({ data, resetState }: { data: CommentData; resetState: () => void }) {
+export function CompleteView({
+  data,
+  resetState,
+  postData,
+}: {
+  data: CommentData;
+  resetState: () => void;
+  postData: PostData;
+}) {
   return (
     <>
       <button
@@ -46,7 +55,7 @@ export function CompleteView({ data, resetState }: { data: CommentData; resetSta
       >
         Summarize something else
       </button>
-      <RenderPost data={data as any} />
+      <RenderPost data={data as any} postData={postData} />
     </>
   );
 }

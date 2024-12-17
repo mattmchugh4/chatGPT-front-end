@@ -12,12 +12,18 @@ export enum AppState {
   Complete = 'complete',
   Error = 'error',
 }
+export interface PostData {
+  post_title: string;
+  initial_post: string;
+  post_date: string;
+}
 
 export default function SocketApp() {
   const [appState, setAppState] = useState<AppState>(AppState.Search);
   const [data, setData] = useState<CommentData | null>({ overall_summary: '' } as CommentData);
   const [statusMessage, setStatusMessage] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [postData, setPostData] = useState<PostData | null>(null);
 
   // useEffect(() => {
   //   const fetchSearchResults = async () => {
@@ -58,6 +64,10 @@ export default function SocketApp() {
     setAppState(AppState.Complete);
   }, []);
 
+  const handlePostData = useCallback((data: PostData) => {
+    setPostData(data);
+  }, []);
+
   const handleStatusMessage = useCallback((message: string) => {
     setStatusMessage(message);
     if (message === 'Response complete') {
@@ -87,13 +97,14 @@ export default function SocketApp() {
       console.error('Socket not connected');
     }
   };
-  console.log('socket', process.env.NEXT_PUBLIC_SOCKET_URL);
+
   const { isConnected, socket } = useSocket(
     process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:5001',
     handleCommentData,
     handleStatusMessage,
     handleError,
     handleStreamResponse,
+    handlePostData,
   );
 
   if (!isConnected) {
@@ -114,15 +125,9 @@ export default function SocketApp() {
         </div>
       )}
       {(appState === AppState.Streaming || appState === AppState.Complete) && data && (
-        <CompleteView data={data} resetState={resetState} />
+        <CompleteView data={data} postData={postData} resetState={resetState} />
       )}
       {appState === AppState.Error && <ErrorView error={error} />}
-      {/* <button
-        className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-        onClick={testConnection}
-      >
-        Test Connection
-      </button> */}
     </div>
   );
 }
