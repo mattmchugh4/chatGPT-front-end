@@ -1,7 +1,10 @@
 # Reddit AI Summarizer
 
-A full-stack project showcasing an **AI-powered Reddit thread summarization tool**. The frontend, built with **Next.js (App Router)**, delivers real-time responses via **WebSocket communication** and the **ChatGPT API's streaming capabilities**. The backend, a **Flask application**, handles data scraping, post and comment processing, and making requests to the ChatGPT API. It is deployed on **Railway**.
+A full-stack project showcasing an AI-powered Reddit thread summarization tool. The frontend, built with Next.js (App Router), delivers real-time responses via WebSocket communication and the ChatGPT API's streaming capabilities. The backend, a Flask application, handles the AI processing and is deployed on Railway.
 
+**Check out the live app here**: [Live Demo](https://reddit-ai-summarizer-ui.vercel.app/)
+
+![Screenshot 2025-01-11 at 6 12 43 PM](https://github.com/user-attachments/assets/fab003ea-0279-47e2-99a0-e8fe94dea15d)
 ---
 
 ## Features
@@ -32,8 +35,6 @@ A full-stack project showcasing an **AI-powered Reddit thread summarization tool
 
 1. **Input a Reddit URL**: Paste the link to a Reddit thread into the input field.
 2. **Ask a Question**: Provide a specific question or prompt to tailor the summarization.
+
 3. **AI Summarization**: Receive streaming responses based on the scraped Reddit post and its comments.
 
----
-
-**Check out the live app here**: [Live Demo](https://reddit-ai-summarizer-ui.vercel.app/)
