@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Reddit AI Summarizer
 
-## Getting Started
+A full-stack project showcasing an **AI-powered Reddit thread summarization tool**. The frontend, built with **Next.js (App Router)**, delivers real-time responses via **WebSocket communication** and the **ChatGPT API's streaming capabilities**. The backend, a **Flask application**, handles data scraping, post and comment processing, and making requests to the ChatGPT API. It is deployed on **Railway**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Paste and Analyze**: Simply paste a Reddit URL and ask a question about the thread.
+- **AI-Powered Summaries**: Get concise, intelligent summaries of the thread and its comments powered by the chatGPT API.
+- **Real-Time Updates**: Enjoy a smooth user experience with responses streamed in real time.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+### Frontend:
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework**: Next.js (App Router)
+- **Deployment**: Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Backend:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework**: Flask
+- **Deployment**: Railway
+- **Real-Time Communication**: WebSockets
+- **AI Backend**: ChatGPT API (streaming mode)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## How It Works
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Input a Reddit URL**: Paste the link to a Reddit thread into the input field.
+2. **Ask a Question**: Provide a specific question or prompt to tailor the summarization.
+3. **AI Summarization**: Receive streaming responses based on the scraped Reddit post and its comments.
+
+---
+
+**Check out the live app here**: [Live Demo](https://reddit-ai-summarizer-ui.vercel.app/)

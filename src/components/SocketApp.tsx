@@ -118,12 +118,13 @@ export default function SocketApp() {
       {appState === AppState.Search && (
         <SearchView socket={socket} onStart={() => setAppState(AppState.Loading)} />
       )}
-      {appState === AppState.Loading && <LoadingView />}
       {statusMessage && statusMessage !== 'Response complete' && (
-        <div className="mb-4">
+        <div>
           <span className="text-md block italic text-black">{statusMessage}</span>
         </div>
       )}
+      {appState === AppState.Loading && <LoadingView />}
+
       {(appState === AppState.Streaming || appState === AppState.Complete) && data && (
         <CompleteView data={data} postData={postData} resetState={resetState} />
       )}

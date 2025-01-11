@@ -30,7 +30,7 @@ export function SearchView({ socket, onStart }: { socket: Socket | null; onStart
 
 export function LoadingView() {
   return (
-    <div className="mt-14 flex h-[calc(100vh_-_9.5rem)] w-full flex-col items-center">
+    <div className="mt-10 flex h-[calc(100vh_-_9.5rem)] w-full flex-col items-center">
       <div className="flex w-1/3 items-center justify-center rounded-lg border border-gray-600 bg-white p-6 pb-10 pt-9 shadow-md">
         <PropagateLoader color={'#FF7F50'} loading={true} size={15} />
       </div>

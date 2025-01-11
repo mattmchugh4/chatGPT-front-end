@@ -36,9 +36,12 @@ interface MakeRequestProps {
 
 export default function MakeRequest({ socket, setAppState }: MakeRequestProps) {
   const [urlInput, setUrlInput] = useState<string>(
-    'https://www.reddit.com/r/EngineeringResumes/comments/19e0krm/2_yoe_software_engineer_not_getting_any_callbacks/',
+    'https://www.reddit.com/r/FoodNYC/comments/1d28xsr/recommendations_for_nyc_hidden_gems/',
   );
-  const [question, setQuestion] = useState<string>('whats some advice for my resume');
+  const [question, setQuestion] = useState<string>(
+    'Can you provide some top food recommendations from this post that people suggest in NYC?',
+  );
+  const [isInteracted, setIsInteracted] = useState<boolean>(false);
 
   const handleRequest = () => {
     if (!urlInput.trim() && !question.trim()) {
@@ -48,11 +51,21 @@ export default function MakeRequest({ socket, setAppState }: MakeRequestProps) {
     socket?.emit('searchUrlAndQuestion', { inputUrl: urlInput, userQuestion: question });
   };
 
+  const handleInteraction = () => {
+    if (!isInteracted) {
+      setUrlInput('');
+      setQuestion('');
+      setIsInteracted(true);
+    }
+  };
+
   const handleUrlInput = (event: ChangeEvent<HTMLInputElement>) => {
+    handleInteraction();
     setUrlInput(event.target.value);
   };
 
   const handleQuestionInput = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    handleInteraction();
     setQuestion(event.target.value);
   };
 
@@ -66,10 +79,11 @@ export default function MakeRequest({ socket, setAppState }: MakeRequestProps) {
           <input
             type="text"
             id="urlInput"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black`}
             onChange={handleUrlInput}
+            onFocus={handleInteraction}
             value={urlInput}
-            placeholder="https://www.reddit.com/r/example/comments/..."
+            placeholder="https://www.reddit.com/r/example/..."
           />
         </div>
 
@@ -79,10 +93,11 @@ export default function MakeRequest({ socket, setAppState }: MakeRequestProps) {
           </label>
           <textarea
             id="questionInput"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full rounded-md border border-gray-300 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500`}
             onChange={handleQuestionInput}
+            onFocus={handleInteraction}
             value={question}
-            placeholder="Type your question for ChatGPT here..."
+            // placeholder="Type your question for ChatGPT here..."
             rows={4}
           ></textarea>
         </div>
@@ -95,7 +110,7 @@ export default function MakeRequest({ socket, setAppState }: MakeRequestProps) {
               !urlInput.trim() && !question.trim() ? 'cursor-not-allowed opacity-50' : ''
             }`}
           >
-            Submit
+            {isInteracted ? 'Submit' : 'Try it'}
           </button>
         </div>
       </div>
